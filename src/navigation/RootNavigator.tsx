@@ -1,43 +1,39 @@
-import {
-  DefaultTheme,
-  NavigationContainer,
-  type Theme,
-} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { colors, strings } from '../constants';
-import { HomeScreen } from '../screens/Home';
+import { useAuthStatus } from '../auth';
+import { AppLoader } from '../components';
+import { colors } from '../constants';
+import { LoginScreen } from '../screens/Login';
+import { MainTabs } from './MainTabs';
 import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const navigationTheme: Theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: colors.background,
-    primary: colors.primary,
-    card: colors.surface,
-    text: colors.textPrimary,
-    border: colors.border,
-    notification: colors.primary,
-  },
-};
-
 export function RootNavigator() {
+  const status = useAuthStatus();
+
+  if (status === 'restoring') {
+    return <AppLoader fullscreen />;
+  }
+
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
           contentStyle: { backgroundColor: colors.background },
         }}
       >
-        <Stack.Screen
-          component={HomeScreen}
-          name="Home"
-          options={{ title: strings.home.title }}
-        />
+        {status === 'signedIn' ? (
+          <Stack.Screen component={MainTabs} name="Main" />
+        ) : (
+          <Stack.Screen
+            component={LoginScreen}
+            name="Login"
+            options={{ animationTypeForReplace: 'pop' }}
+          />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

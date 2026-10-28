@@ -8,4 +8,6 @@ export const colors = {
   onPrimary: '#FFFFFF',
   border: '#E4E8EE',
   disabled: '#D5DCE3',
+  error: '#C0392B',
+  backdrop: 'rgba(0, 0, 0, 0.4)',
 } as const;

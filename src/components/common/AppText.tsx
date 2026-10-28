@@ -7,6 +7,7 @@ const textColors = StyleSheet.create({
   primary: { color: colors.textPrimary },
   secondary: { color: colors.textSecondary },
   inverse: { color: colors.onPrimary },
+  error: { color: colors.error },
 });
 
 type TextColor = keyof typeof textColors;
